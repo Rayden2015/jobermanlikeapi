@@ -6,10 +6,17 @@ const app = express();
 const dotenv = require('dotenv');
 dotenv.config({path: './config/config.env'});
 
+//Connecting to database
+const connectDatabase = require('./config/database');
+connectDatabase();
+
 
 //Setting up routes
 const jobs = require('./routes/jobs');
 app.use('/api/v1',jobs);
+
+
+
 
 
 //Starting Server

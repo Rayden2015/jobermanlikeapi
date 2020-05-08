@@ -4,15 +4,16 @@
   "description": "Job Application Api",
   "main": "app.js",
   "scripts": {
-    "start" : "node app.js",
-    "dev" : "nodemon app",
-    "prod" : "SET NODE_ENV=production & nodemon app.js"
+    "start": "node app.js",
+    "dev": "nodemon app",
+    "prod": "SET NODE_ENV=production & nodemon app.js"
   },
   "author": "Nurudin Lartey",
   "license": "MIT",
   "dependencies": {
     "dotenv": "^8.2.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mongoose": "^5.9.12"
   },
   "devDependencies": {
     "nodemon": "^2.0.3"
