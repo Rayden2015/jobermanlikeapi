@@ -11,13 +11,19 @@ const connectDatabase = require('./config/database');
 connectDatabase();
 
 
+//Creating own middleware
+const middleware = (req, res, next) => {
+    console.log('Hello from Middlware');
+    req.user = 'Nurudin Lartey';
+    next();
+}
+
+app.use(middleware);
+
+
 //Setting up routes
 const jobs = require('./routes/jobs');
 app.use('/api/v1',jobs);
-
-
-
-
 
 //Starting Server
 const PORT = process.env.PORT;
