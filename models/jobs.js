@@ -1,15 +1,18 @@
 const mongoose  = require('mongoose');
+const validator = require('validator');
+const slugify = require('slugify');
 
-const jobScheme = new mongoose.Schema({
+const jobSchema = new mongoose.Schema({
     title: {
         type: String,
         required: [true, 'Please enter Job title'],
         trim: true,
         maxlength: [100, 'Job title can not exceed 100 characters']
     },
+    slug: String,
     email: {
         type: String,
-        // validate: [validator.isEmail, 'Please enter a valid email address.']
+        validate: [validator.isEmail, 'Please enter a valid email address.']
     },
     addres:{
         type: String,
@@ -72,7 +75,14 @@ const jobScheme = new mongoose.Schema({
         select: false
     }
 
-})
+});
 
-module.exports = mongoose.model('Job', jobScheme);
+
+//Creating job slug before saving
+jobSchema.pre('save', function(next){
+    this.slug = slugify(this.title, {lower: true});
+    next()
+});
+
+module.exports = mongoose.model('Job', jobSchema);
 
