@@ -9,7 +9,7 @@ const jobScheme = new mongoose.Schema({
     },
     email: {
         type: String,
-        validate: [validator.isEmail, 'Please enter a valid email address.'
+        // validate: [validator.isEmail, 'Please enter a valid email address.']
     },
     addres:{
         type: String,
@@ -71,7 +71,6 @@ const jobScheme = new mongoose.Schema({
         type: Object,
         select: false
     }
-
 
 })
 

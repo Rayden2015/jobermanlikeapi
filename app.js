@@ -10,6 +10,9 @@ dotenv.config({path: './config/config.env'});
 const connectDatabase = require('./config/database');
 connectDatabase();
 
+//Setup body parser
+app.use(express.json());
+
 
 //Creating own middleware
 const middleware = (req, res, next) => {
