@@ -95,11 +95,7 @@ exports.deleteJob = async (req, res, next) => {
             });
         }
     
-        job = await Job.findByIdAndDelete(req.params.id,req.body,{
-            new: true,
-            runValidators: true,
-            useFindAndModify: false
-        });
+        job = await Job.findByIdAndDelete(req.params.id,req.body);
     
         res.status(200).json({
             success: true,
@@ -108,7 +104,7 @@ exports.deleteJob = async (req, res, next) => {
     });
    
     }catch(e){
-        console.error('Update Job | error : '); 
+        console.error('Delete Job | error : '); 
         console.error(e.message);
     }
 }
