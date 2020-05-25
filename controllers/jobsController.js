@@ -18,13 +18,20 @@ exports.newJob = async (req, res, next) => {
     console.log('Add New Job | Request Body : ');
     console.log(req.body);
 
-    const jobs = await Job.create(req.body);
+    try{
+        const jobs = await Job.create(req.body);
+        res.status('200').json({
+            success: true,
+            message: 'Job Created',
+            data: jobs
+        });
+        
+    }catch(e){
+        console.error('Create job error : '+e.message);
+    }
+ 
    
-    res.status('200').json({
-        success: true,
-        message: 'Job Created',
-        data: jobs
-    })
+  
 
 }
 
@@ -107,4 +114,29 @@ exports.deleteJob = async (req, res, next) => {
         console.error('Delete Job | error : '); 
         console.error(e.message);
     }
+}
+
+
+//Getting a single job with id and slug => /api/v1/job/:id/:slug
+exports.getJob = async (req, res, next) => {
+    try{
+        const job = await Job.findById(req.params.id);
+
+        if(!job){
+            return res.status(404).json({
+                success: false,
+                message: 'Job not found.'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Job found',
+            data: job
+        });
+
+    }catch(e){
+        console.error('Get Job Error : ' + e.message);
+    }
+    
 }
