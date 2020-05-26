@@ -25,7 +25,7 @@ exports.newJob = async (req, res, next) => {
             message: 'Job Created',
             data: jobs
         });
-        
+
     }catch(e){
         console.error('Create job error : '+e.message);
     }
@@ -139,4 +139,49 @@ exports.getJob = async (req, res, next) => {
         console.error('Get Job Error : ' + e.message);
     }
     
+}
+
+
+
+//get statistics abooout a topic(job)  => /api/v1/stats/:topic
+exports.jobStats = async (req, res, next) => {
+    try{
+        const stats = await Job.aggregate([
+            {
+                $match : {$text : {$search : "\"" + req.params.topic + "\""}}
+            },
+            {
+                $group: {
+                    //_id: null,
+                    _id:                {$toUpper: '$experience'},
+                    totalJobs:          {$sum:  1},
+                    totalPositions:     {$sum: '$positions'},
+                    avgPosition:        {$avg: '$positions'},
+                    avgSalary :         {$avg: '$salary'},
+                    minSalary :         {$min: '$salary'},
+                    maxSalary:          {$max: '$salary'}
+                }
+            }
+        ]);
+
+        if(stats.length === 0){
+            return res.status(404).json({
+                success: false,
+                message: `No stats found for - ${req.params.topic}`
+            });
+        }
+    
+        res.status(400).json({
+            success: true,
+            message: `Stats found for - ${req.params.topic}`,
+            data: stats
+        });
+
+    }catch(e){
+        console.error("JobStats Error : "+ e.message);
+    }
+    
+
+    
+
 }

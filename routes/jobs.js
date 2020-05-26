@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 //Importing Jobs Controller
-const { getJobs, newJob, getJobsInRadius, updateJob, deleteJob, getJob } =require('../controllers/jobsController');
+const { getJobs, newJob, getJobsInRadius, updateJob, deleteJob, getJob, jobStats } =require('../controllers/jobsController');
 
 
 //Assinging jobs controller to route
@@ -13,6 +13,7 @@ router.route('/job/:id')
         .put(updateJob)
         .delete(deleteJob);
 router.route('/job/:id').get(getJob); //Getting a single job single the id and or slug
+router.route('/job/stats/:topic').get(jobStats); //Gettting job statistics given the job(topic)
 
 
 
