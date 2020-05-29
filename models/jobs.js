@@ -7,7 +7,7 @@ const jobSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please enter Job title'],
         trim: true,
-        maxlength: [100, 'Job title can not exceed 100 characters']
+        maxLength: [100, 'Job title can not exceed 100 characters']
     },
     slug: String,
     email: {

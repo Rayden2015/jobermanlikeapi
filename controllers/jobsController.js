@@ -1,5 +1,8 @@
 const Job = require('../models/jobs');
 const geoCoder = require('../utils/geocoder');
+const ErrorHandler = require('../utils/errorHandler');
+const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
+
 
 //Get all jobs => /api/v1/jobs
 exports.getJobs = async (req, res, next ) => {
@@ -14,26 +17,19 @@ exports.getJobs = async (req, res, next ) => {
 }
 
 //Create a new job => /api/v1/jobs/new
-exports.newJob = async (req, res, next) => {
+exports.newJob = catchAsyncErrors ( async (req, res, next) => {
     console.log('Add New Job | Request Body : ');
     console.log(req.body);
 
-    try{
-        const jobs = await Job.create(req.body);
-        res.status('200').json({
-            success: true,
-            message: 'Job Created',
-            data: jobs
-        });
+    const job = await Job.create(req.body);
+    res.status('200').json({
+        success: true,
+        message: 'Job Created',
+        data: job
+    });
 
-    }catch(e){
-        console.error('Create job error : '+e.message);
     }
- 
-   
-  
-
-}
+);
 
 
 //Search for jobs withing a city and radius => /api/v1/jobs/:zipcode/:distance
@@ -67,27 +63,24 @@ exports.getJobsInRadius = async (req, res, next) => {
 
 //Update Job
 exports.updateJob = async (req, res, next) => {
-    try{
-        let job = await Job.findById(req.params.id);
+        let job =  await Job.findById(req.params.id);
+    
         if(!job){
-            return res.status(404).json({
-                success: false,
-                message: 'Job not found.'
-            });
+            return next (new ErrorHandler('Job not found', 404));
         }
     
-        job = await Job.findByIdAndUpdate(req.params.id,req.body);
+        job = await Job.findByIdAndUpdate(req.params.id,req.body,{
+            new: true,
+            runValidators: true,
+            useFindAndModify: false
+        });
     
         res.status(200).json({
             success: true,
             message : 'Job Updated Successfully',
             data: job
-    });
+        }); 
    
-    }catch(e){
-        console.error('Update Job | error : '); 
-        console.error(e.message);
-    }
 }
 
 

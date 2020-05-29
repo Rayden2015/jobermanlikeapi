@@ -1,17 +1,30 @@
 const express = require('express');
 const app = express();
-
-
-//Setting up config env
 const dotenv = require('dotenv');
-dotenv.config({path: './config/config.env'});
+const connectDatabase = require('./config/database');
+const errorMiddleware = require('./middlewares/errors');
+const catchAsyncErrors = require('./middlewares/catchAsyncErrors');
+
+
+
+//Middleware for Error handling
+app.use(errorMiddleware);
+ 
+//Setting up config env
+dotenv.config({path: './config/config.env'})
 
 //Connecting to database
-const connectDatabase = require('./config/database');
 connectDatabase();
 
 //Setup body parser
 app.use(express.json());
+
+//Setting up routes
+const jobs = require('./routes/jobs');
+app.use('/api/v1',jobs);
+
+//Error Middleware
+app.use(errorMiddleware);
 
 
 //Creating own middleware
@@ -20,13 +33,10 @@ const middleware = (req, res, next) => {
     req.user = 'Nurudin Lartey';
     next();
 }
-
 app.use(middleware);
 
 
-//Setting up routes
-const jobs = require('./routes/jobs');
-app.use('/api/v1',jobs);
+
 
 //Starting Server
 const PORT = process.env.PORT;
