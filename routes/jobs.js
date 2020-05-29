@@ -13,7 +13,7 @@ router.route('/job/:id')
         .put(updateJob)
         .delete(deleteJob);
 router.route('/job/:id').get(getJob); //Getting a single job single the id and or slug
-router.route('/job/stats/:topic').get(jobStats); //Gettting job statistics given the job(topic)
+router.route('/job/stats/:topic').get(jobStats); //Getting job statistics given the job(topic)
 
 
 module.exports = router;
