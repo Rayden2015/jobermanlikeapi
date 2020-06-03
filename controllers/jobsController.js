@@ -152,10 +152,11 @@ exports.jobStats = async (req, res, next) => {
         ]);
 
         if(stats.length === 0){
-            return res.status(404).json({
-                success: false,
-                message: `No stats found for - ${req.params.topic}`
-            });
+            return next(new ErrorHandler(`Stats found for - ${req.params.topic}`, 404));
+            // return res.status(404).json({
+            //     success: false,
+            //     message: `No stats found for - ${req.params.topic}`
+            // });
         }
     
         res.status(400).json({
