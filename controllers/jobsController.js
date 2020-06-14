@@ -8,7 +8,12 @@ const APIFilters = require('../utils/apiFilters');
 //Get all jobs => /api/v1/jobs
 exports.getJobs = async (req, res, next ) => {
 
-    const apiFilters = new APIFilters(Job.find(), req.query).filter().sort();
+    const apiFilters = new APIFilters(Job.find(), req.query)
+            .filter()
+            .sort()
+            // .limitFields()
+            // .searchByQuery()
+            .pagination();
     
     //const jobs = await Job.find();
     const jobs = await apiFilters.query;
