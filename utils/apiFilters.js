@@ -9,7 +9,7 @@ class APIFilters {
         const queryCopy = { ...this.queryStr};
 
         //Removing fields from query
-        const removeFields = ['sort'];
+        const removeFields = ['sort','fields', 'q'];
         removeFields.forEach(el => delete queryCopy[el]);
         
         //Advance filter using : lt, lte, gt, gte
@@ -33,6 +33,24 @@ class APIFilters {
         }
 
         return this;
+    }
+
+    limitFields(){
+        if(this.queryStr.fields){
+            const fields = this.query.fields.split(',').join('');
+            this.query = this.query.select(fields);
+        }else{
+            this.query = this.query.select('-__v');
+        }
+        return this;
+    }
+
+    searchByQuery(){
+        if(this.queryStr.q){
+            const qu = this.queryStr.q.split('-').join(' ');
+            console.log("Api Filter |searchByQuery() | qu : " +qu);
+            this.query = this.query.find({$text : {$search: "\"" + qu +"\""}});
+        }
     }
 }
 
