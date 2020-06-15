@@ -20,7 +20,9 @@ app.use(express.json());
 
 //Setting up routes
 const jobs = require('./routes/jobs');
+const auth = require('./routes/auth');
 app.use('/api/v1', jobs);
+app.use('/api/v1', auth);
 
 //Middleware for Error handling
 app.use(errorMiddleware);
