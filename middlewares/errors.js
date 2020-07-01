@@ -19,7 +19,7 @@ module.exports = (err, req, res, next) => {
 
     if(process.env.NODE_ENV === 'production'){
         console.log('Production Mode');
-        console.log(`Error name : ${err.name}`);
+        //console.log(`Error name : ${err.name}`);
         let error = {...err};
 
         error.message = err.message;

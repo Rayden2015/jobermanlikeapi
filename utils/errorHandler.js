@@ -1,6 +1,6 @@
 class ErrorHandler extends Error {
     constructor(message, statusCode){
-        console.log("Error Handler Class");
+        //console.log("Error Handler Class");
         super(message);
         this.statusCode = statusCode;
 
@@ -9,5 +9,5 @@ class ErrorHandler extends Error {
 }
 
 
-module.exports = ErrorHandler;
+module.exports =  ErrorHandler;
 

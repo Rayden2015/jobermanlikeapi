@@ -1,10 +1,14 @@
 const express = require('express');
 const app = express();
+
 const dotenv = require('dotenv');
+const cookieParser  = require('./utils/errorHandler');
+
 const connectDatabase = require('./config/database');
 const errorMiddleware = require('./middlewares/errors');
 const catchAsyncErrors = require('./middlewares/catchAsyncErrors');
 const ErrorHandler =require('./utils/errorHandler');
+
 
 
 //Setting up config env
@@ -16,6 +20,9 @@ connectDatabase();
 
 //Setup body parser
 app.use(express.json());
+
+//set Cookie Parse
+//app.use(cookieParser());
 
 
 //Setting up routes
