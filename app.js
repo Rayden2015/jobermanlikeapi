@@ -1,5 +1,10 @@
 const express = require('express');
+const Sentry = require('@sentry/node');
 const app = express();
+
+Sentry.init({ dsn: 'https://11ead0a432174cce8c8f58ebce7c3181@o292934.ingest.sentry.io/5304840' });
+
+app.use(Sentry.Handlers.requestHandler());
 
 const dotenv = require('dotenv');
 const cookieParser  = require('./utils/errorHandler');
@@ -31,11 +36,24 @@ const auth = require('./routes/auth');
 app.use('/api/v1', jobs);
 app.use('/api/v1', auth);
 
+app.get('api/v1/debug-sentry', function mainHandler(req, res) {
+    throw new Error('My first Sentry error!');
+  });
+
 //Middleware for Error handling
 app.use(errorMiddleware);
 
  
 
+app.use(function onError(err, req, res, next) {
+    // The error id is attached to `res.sentry` to be returned
+    // and optionally displayed to the user for support.
+    res.statusCode = 500;
+    res.end(res.sentry + "\n");
+  });
+
+
+app.use(Sentry.Handlers.errorHandler()); 
 
 //Starting Server
 const PORT = process.env.PORT;
