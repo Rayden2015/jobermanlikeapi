@@ -36,7 +36,7 @@ const auth = require('./routes/auth');
 app.use('/api/v1', jobs);
 app.use('/api/v1', auth);
 
-app.get('api/v1/debug-sentry', function mainHandler(req, res) {
+app.get('debug-sentry', function mainHandler(req, res) {
     throw new Error('My first Sentry error!');
   });
 
