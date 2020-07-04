@@ -30,7 +30,11 @@ exports.getJobs = async (req, res, next ) => {
 //Create a new job => /api/v1/jobs/new
 exports.newJob = catchAsyncErrors ( async (req, res, next) => {
 
+    //Adding user to request body
+    req.body.user = req.user.id
+
     const job = await Job.create(req.body);
+
     res.status('200').json({
         success: true,
         message: 'Job Created',
