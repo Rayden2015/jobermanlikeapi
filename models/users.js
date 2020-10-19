@@ -39,9 +39,12 @@ const userSchema = new mongoose.Schema({
 });
 
 //Encryting Passwords before Saving
-userSchema.pre('save', async function(next){
-    this.password = await bcrypt.hash(this.password, 10);
-});
+// userSchema.pre('save', async function (next) {
+//     const hash = await bcrypt.hash(this.password, 10);
+//     this.password = hash;
+//     next()
+//   });
+
 
 //Return JSON web token
 userSchema.methods.getJwtToken = function(){
@@ -66,14 +69,12 @@ userSchema.methods.getResetPasswordToken = function(){
         .createHash('sha256')
         .update(resetToken)
         .digest('hex');
-    console.log('Models | users | resetPassword Token | resetPasswordToken : ');
-    console.log(resetPasswordToken);
+   console.log('Models | users | resetPasswordToken : '+this.resetPasswordToken);
 
     //Set token expire time
-    this.resetPasswordExpire = Date.now() + 30*60*1000;
+    this.resetPasswordExpire = Date.now() + 30*60*10000;
 
     return resetToken;
-
 }
 
 module.exports = mongoose.model('User', userSchema);
