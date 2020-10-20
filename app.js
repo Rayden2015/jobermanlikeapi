@@ -33,8 +33,11 @@ app.use(express.json());
 //Setting up routes
 const jobs = require('./routes/jobs');
 const auth = require('./routes/auth');
+const user = require('./routes/user');
 app.use('/api/v1', jobs);
 app.use('/api/v1', auth);
+app.use('/api/v1', user);
+
 
 app.get('debug-sentry', function mainHandler(req, res) {
     throw new Error('My first Sentry error!');
