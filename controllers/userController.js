@@ -38,3 +38,21 @@ exports.updatePassword = catchAsyncErrors(async(req, res, next) => {
         message: 'Password updated successfully'
     })
 });
+
+
+//Update current user data => /api/v1/me/update
+exports.updateUser = catchAsyncErrors(async(req, res, next) => {
+    console.log('userController | updateUser | '+ req.user);
+    const newUserData = {
+        name    : req.body.name,
+        email   : req.body.email,
+        role    : req.body.role
+    }
+
+    const user = await User.findByIdAndUpdate(req.user.id,newUserData, {runValidators: true});
+
+    res.status(200).json({
+        success: true,
+        data: user
+    });
+});
