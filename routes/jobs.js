@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 //Importing Jobs Controller
-const { getJobs, newJob, getJobsInRadius, updateJob, deleteJob, getJob, jobStats } = require('../controllers/jobsController');
+const { getJobs, newJob, getJobsInRadius, updateJob, deleteJob, getJob, jobStats, applyJob } = require('../controllers/jobsController');
 
 const {isAuthenticatedUser, authorizeRoles} = require('../middlewares/auth');
 
@@ -15,6 +15,8 @@ router.route('/job/:id')
         .delete(isAuthenticatedUser,authorizeRoles('employer','admin'), deleteJob);
 router.route('/job/:id').get(getJob); //Getting a single job single the id and or slug
 router.route('/job/stats/:topic').get(jobStats); //Getting job statistics given the job(topic)
+
+router.route('/job/:id/apply').put(isAuthenticatedUser,authorizeRoles('user'),applyJob);
 
 
 module.exports = router;

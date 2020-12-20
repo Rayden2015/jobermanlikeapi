@@ -8,12 +8,12 @@ app.use(Sentry.Handlers.requestHandler());
 
 const dotenv = require('dotenv');
 const cookieParser  = require('./utils/errorHandler');
+const fileUpload = require('express-fileupload');
 
 const connectDatabase = require('./config/database');
 const errorMiddleware = require('./middlewares/errors');
 const catchAsyncErrors = require('./middlewares/catchAsyncErrors');
 const ErrorHandler =require('./utils/errorHandler');
-
 
 
 //Setting up config env
@@ -28,6 +28,9 @@ app.use(express.json());
 
 //set Cookie Parse
 //app.use(cookieParser());
+
+//File upload
+app.use(fileUpload());
 
 
 //Setting up routes
