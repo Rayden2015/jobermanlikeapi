@@ -185,10 +185,12 @@ exports.applyJob = catchAsyncErrors(async (req, res, next) => {
     //     return next (new ErrorHandler('You cannot apply to this job, date is over', 400));
     // }
 
-    //Check if applicant has already applied
+    //Check if applicant has already applied to the job
     job = await Job.find({'applicantsApplied.id': req.user.id}).select('+applicantsApplied');
-    if(job){
-      return next (new ErrorHandler('You have already applied to this job', 400));
+    for(let i=0; i< job.applicantsApplied.length; i++){
+        if(job.applicantsApplied[i].id === req.user.id ){
+          return next (new ErrorHandler('You have already applied to this job', 400));
+        }
     }
 
 
