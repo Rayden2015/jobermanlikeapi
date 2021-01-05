@@ -128,3 +128,12 @@ async function deleteUserData(user, role) {
 
 
 //Show all jobs applied => /api/v1/jobs/applied
+exports.getAppliedJobs = catchAsyncErrors(async(req, res, next) => {
+    const jobs = await Job.find({'applicantsApplied.id' : req.user.id}).select('+applicantsApplied');
+
+    res.status(200).json({
+      success: true,
+      results: jobs.length,
+      data: jobs
+    })
+});
