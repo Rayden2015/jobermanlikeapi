@@ -125,3 +125,6 @@ async function deleteUserData(user, role) {
     }
   }
 }
+
+
+//Show all jobs applied => /api/v1/jobs/applied
