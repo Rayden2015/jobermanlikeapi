@@ -186,12 +186,12 @@ exports.applyJob = catchAsyncErrors(async (req, res, next) => {
     // }
 
     //Check if applicant has already applied to the job
-    job = await Job.find({'applicantsApplied.id': req.user.id}).select('+applicantsApplied');
-    for(let i=0; i< job.applicantsApplied.length; i++){
-        if(job.applicantsApplied[i].id === req.user.id ){
-          return next (new ErrorHandler('You have already applied to this job', 400));
-        }
-    }
+    // job = await Job.find({'applicantsApplied.id': req.user.id}).select('+applicantsApplied');
+    // for(let i=0; i< job.applicantsApplied.length; i++){
+    //     if(job.applicantsApplied[i].id === req.user.id ){
+    //       return next (new ErrorHandler('You have already applied to this job', 400));
+    //     }
+    // }
 
 
     //Check the files
