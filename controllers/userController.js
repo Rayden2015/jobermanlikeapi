@@ -127,7 +127,7 @@ async function deleteUserData(user, role) {
 }
 
 
-//Show all jobs applied => /api/v1/jobs/applied
+//Show all jobs applied by the curent user => /api/v1/jobs/applied
 exports.getAppliedJobs = catchAsyncErrors(async(req, res, next) => {
     const jobs = await Job.find({'applicantsApplied.id' : req.user.id}).select('+applicantsApplied');
 
@@ -136,4 +136,16 @@ exports.getAppliedJobs = catchAsyncErrors(async(req, res, next) => {
       results: jobs.length,
       data: jobs
     })
+});
+
+
+//show all jobs published by the employer => /api/v1/jobs/published
+exports.getPublishedJobs = catchAsyncErrors(async(req, res, next) => {
+    const jobs = await Job.find({'user': req.user.id});
+
+    res.status(200).json({
+      success: true,
+      results: jobs.length,
+      data: jobs
+    });
 });
