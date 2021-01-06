@@ -5,6 +5,8 @@ const errorHandler = require("../utils/errorHandler");
 const ErrorHandler = require("../utils/errorHandler");
 const sendToken = require("../utils/jwtToken");
 const fs = require('fs');
+const APIFilters = require('../utils/apiFilters');
+
 
 //Get current user profile => /api/v1/me
 exports.getUserProfile = catchAsyncErrors(async (req, res, next) => {
@@ -149,3 +151,31 @@ exports.getPublishedJobs = catchAsyncErrors(async(req, res, next) => {
       data: jobs
     });
 });
+
+
+//show all user //admin
+exports.getUsers = catchAsyncErrors(async(req, res, next) => {
+    const apiFilters = new APIFilters(User.find(), req.query)
+        .filter()
+        .sort()
+        .limitFields()
+        .pagination();
+
+    const users = await apiFilters.query;
+
+    res.status(200).json({
+        success: true,
+        data: users,
+        results: users.length
+    });
+});
+
+//delete user (Admin) => /api/v1/user/:id
+exports.deleteUser = catchAsyncErrors(async(req, res, next) => {
+    const user = await User.findById(req.params.id);
+
+    if(!user){
+      return next (new errorHandler(`User not found with the id: ${req.params.id}`, 404));
+    }
+});
+
