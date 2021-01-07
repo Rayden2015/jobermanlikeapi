@@ -171,11 +171,20 @@ exports.getUsers = catchAsyncErrors(async(req, res, next) => {
 });
 
 //delete user (Admin) => /api/v1/user/:id
-exports.deleteUser = catchAsyncErrors(async(req, res, next) => {
+exports.deleteUserAdmin = catchAsyncErrors(async(req, res, next) => {
     const user = await User.findById(req.params.id);
 
     if(!user){
       return next (new errorHandler(`User not found with the id: ${req.params.id}`, 404));
     }
+
+    deleteUserData(user.id,user.role);
+    user.remove();
+
+    res.status(200).json({
+      success: true,
+      message: 'User deleted by admin succesfully'
+    })
+
 });
 

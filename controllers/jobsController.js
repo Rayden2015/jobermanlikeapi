@@ -115,7 +115,10 @@ exports.deleteJob = async (req, res, next) => {
 
 //Getting a single job with id and slug => /api/v1/job/:id/:slug
 exports.getJob = async (req, res, next) => {
-  const job = await Job.findById(req.params.id);
+  const job = await Job.find({$and : [{_id: req.params.id}, {slug: req.params.slug}] }).populate({
+    path: 'user',
+    select: 'name'
+  });
 
   if (!job) {
     return res.status(404).json({
