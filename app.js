@@ -18,6 +18,7 @@ const rateLimit = require("express-rate-limit");
 const helemt = require('helmet'); // adding security headers
 const mongoSanitize = require('express-mongo-sanitize'); // data sanitation
 const xssClean = require('xss-clean');
+var hpp = require('hpp'); //prevent parameter Pollution
 
 
 
@@ -43,6 +44,9 @@ app.use(xssClean());
 
 //Setup security headers
 app.use(helemt());
+
+//Parameter pollution prevention
+app.use(hpp()); 
 
 //Rate Limiting
 const limiter = rateLimit({
