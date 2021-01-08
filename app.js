@@ -52,7 +52,7 @@ app.use(xssClean());
 app.use(helemt());
 
 //Parameter pollution prevention
-app.use(hpp()); 
+app.use(hpp());
 
 
 //Rate Limiting

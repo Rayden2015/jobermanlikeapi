@@ -4,7 +4,7 @@
   "description": "Job Application Api",
   "main": "app.js",
   "scripts": {
-    "start": "set NODE_ENV=production & nodemon app.js",
+    "start": "set NODE_ENV=production & node app.js",
     "dev": "nodemon app",
     "prod": "set NODE_ENV=production & nodemon app.js"
   },
