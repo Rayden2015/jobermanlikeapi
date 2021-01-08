@@ -15,7 +15,10 @@ const errorMiddleware = require('./middlewares/errors');
 const catchAsyncErrors = require('./middlewares/catchAsyncErrors');
 const ErrorHandler =require('./utils/errorHandler');
 const rateLimit = require("express-rate-limit");
-const helemt = require('helmet');
+const helemt = require('helmet'); // adding security headers
+const mongoSanitize = require('express-mongo-sanitize'); // data sanitation
+const xssClean = require('xss-clean');
+
 
 
 //Setting up config env
@@ -33,6 +36,10 @@ app.use(express.json());
 
 //File upload
 app.use(fileUpload());
+
+//Data santization
+app.use(mongoSanitize());
+app.use(xssClean());
 
 //Setup security headers
 app.use(helemt());
