@@ -15,6 +15,7 @@ const errorMiddleware = require('./middlewares/errors');
 const catchAsyncErrors = require('./middlewares/catchAsyncErrors');
 const ErrorHandler =require('./utils/errorHandler');
 const rateLimit = require("express-rate-limit");
+const helemt = require('helmet');
 
 
 //Setting up config env
@@ -32,6 +33,9 @@ app.use(express.json());
 
 //File upload
 app.use(fileUpload());
+
+//Setup security headers
+app.use(helemt());
 
 //Rate Limiting
 const limiter = rateLimit({
