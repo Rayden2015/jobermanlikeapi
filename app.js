@@ -20,6 +20,7 @@ const mongoSanitize = require('express-mongo-sanitize'); // data sanitation
 const xssClean = require('xss-clean');
 var hpp = require('hpp'); //prevent parameter Pollution
 var cors = require('cors');
+const bodyParser = require('body-parser')
 
 
 
@@ -28,6 +29,10 @@ dotenv.config({path: './config/config.env'});
 
 //Connecting to database
 connectDatabase();
+
+//Setup body parser for prouction
+app.use(bodyParser.urlencoded({urlencoded: true}));
+app.use(express.static('public'));
 
 
 //Setup body parser

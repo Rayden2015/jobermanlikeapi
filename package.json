@@ -4,7 +4,7 @@
   "description": "Job Application Api",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "set NODE_ENV=production & nodemon app.js",
     "dev": "nodemon app",
     "prod": "set NODE_ENV=production & nodemon app.js"
   },
@@ -13,6 +13,7 @@
   "dependencies": {
     "@sentry/node": "^5.29.2",
     "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
