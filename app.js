@@ -19,6 +19,7 @@ const helemt = require('helmet'); // adding security headers
 const mongoSanitize = require('express-mongo-sanitize'); // data sanitation
 const xssClean = require('xss-clean');
 var hpp = require('hpp'); //prevent parameter Pollution
+var cors = require('cors');
 
 
 
@@ -48,12 +49,16 @@ app.use(helemt());
 //Parameter pollution prevention
 app.use(hpp()); 
 
+
 //Rate Limiting
 const limiter = rateLimit({
     windowMs: 10*60*1000, //minutes
     max: 10 // number per specified minutes
 });
 app.use(limiter);
+
+//CORS error prevention
+app.use(cors());
 
 //Setting up routes
 const jobs = require('./routes/jobs');
