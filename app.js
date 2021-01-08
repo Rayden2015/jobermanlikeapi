@@ -14,6 +14,7 @@ const connectDatabase = require('./config/database');
 const errorMiddleware = require('./middlewares/errors');
 const catchAsyncErrors = require('./middlewares/catchAsyncErrors');
 const ErrorHandler =require('./utils/errorHandler');
+const rateLimit = require("express-rate-limit");
 
 
 //Setting up config env
@@ -32,6 +33,12 @@ app.use(express.json());
 //File upload
 app.use(fileUpload());
 
+//Rate Limiting
+const limiter = rateLimit({
+    windowMs: 10*60*1000, //minutes
+    max: 10 // number per specified minutes
+});
+app.use(limiter);
 
 //Setting up routes
 const jobs = require('./routes/jobs');
@@ -48,8 +55,6 @@ app.get('debug-sentry', function mainHandler(req, res) {
 
 //Middleware for Error handling
 app.use(errorMiddleware);
-
- 
 
 app.use(function onError(err, req, res, next) {
     // The error id is attached to `res.sentry` to be returned
