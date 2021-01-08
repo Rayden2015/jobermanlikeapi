@@ -76,6 +76,11 @@ exports.updateJob = async (req, res, next) => {
     return next(new ErrorHandler("Job not found", 404));
   }
 
+  //Check if user owns the job
+  if(job.user.toString() !== req.user.id){
+    return next(new ErrorHandler('User does not own this job in order to update'));
+  }
+
   job = await Job.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
@@ -91,8 +96,8 @@ exports.updateJob = async (req, res, next) => {
 
 //Deleting a job => /api/v1/job/:id
 exports.deleteJob = async (req, res, next) => {
-  try {
     let job = await Job.findById(req.params.id);
+
     if (!job) {
       return res.status(404).json({
         success: false,
@@ -100,17 +105,31 @@ exports.deleteJob = async (req, res, next) => {
       });
     }
 
-    job = await Job.findByIdAndDelete(req.params.id, req.body);
+    //Check if user owns the job
+    if(job.user.toString() !== req.user.id && req.user.role !== 'admin'){
+      return next(new ErrorHandler('User does not own this job in order to delete it'));
+    }
 
+    //Deleting files associated with job
+    const delJob = await Job.findOne({_id: req.params.id});
+    console.log('DelJob : ');
+    console.dir(delJob);
+
+    for(let i=0; i< delJob.applicantsApplied.length; i++){
+      let filepath = `${__dirname}/public/uploads/${delJob.applicantsApplied[i].resume}`.replace('controllers/', '');
+      console.log(`File Path : ${filepath}`);
+      fs.unlink(filepath, err => {
+          if(err) return console.log(err);
+      });
+    }
+
+    //job = await Job.findByIdAndDelete(req.params.id, req.body);
     res.status(200).json({
       success: true,
       message: "Job Deleted Successfully",
       data: job,
     });
-  } catch (e) {
-    console.error("Delete Job | error : ");
-    console.error(e.message);
-  }
+
 };
 
 //Getting a single job with id and slug => /api/v1/job/:id/:slug
@@ -184,12 +203,14 @@ exports.applyJob = catchAsyncErrors(async (req, res, next) => {
     }
 
     //Check if jobs last date of submission has not passed
-    // if(job.lastDate < new Date(Date.now())){
-    //     return next (new ErrorHandler('You cannot apply to this job, date is over', 400));
-    // }
+    if(job.lastDate < new Date(Date.now())){
+        return next (new ErrorHandler('You cannot apply to this job, date is over', 400));
+    }
 
     //Check if applicant has already applied to the job
     // job = await Job.find({'applicantsApplied.id': req.user.id}).select('+applicantsApplied');
+    // console.log('Jobs with applicants applied : ');
+    // console.dir(job);
     // for(let i=0; i< job.applicantsApplied.length; i++){
     //     if(job.applicantsApplied[i].id === req.user.id ){
     //       return next (new ErrorHandler('You have already applied to this job', 400));
